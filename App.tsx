@@ -5,9 +5,12 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import Hello from 'Component/Hello';
+import TestCpn from 'Component/TestCpn';
+import React, { useState } from 'react';
+import type { PropsWithChildren } from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -29,7 +32,7 @@ type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): JSX.Element {
+function Section({ children, title }: SectionProps): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -57,42 +60,40 @@ function Section({children, title}: SectionProps): JSX.Element {
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [counter, setCounter] = useState(0);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const onPressCounterButton = (amount: number) => {
+    setCounter(pre => pre + amount)
+  }
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <View style={styles.container}>
+      <Text style={StyleSheet.flatten([styles.text, styles.heading])}>Hello world from react-native!</Text>
+      <TestCpn />
+      <Hello name='Huynh' />
+
+      <View>
+        <View>
+          <Text style={styles.text}>{counter}</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        <View style={styles.wrapButton}>
+          <View style={styles.button}>
+            <Button title='-' color={"red"} onPress={() => {
+              onPressCounterButton(-1)
+            }} />
+          </View>
+          <View style={styles.button}>
+            <Button title='+' color={"blue"} onPress={() => {
+              onPressCounterButton(1)
+            }} />
+          </View>
+        </View>
+      </View>
+    </View>
   );
 }
 
@@ -113,6 +114,32 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
+
+  container: {
+    flex: 1,
+    backgroundColor: "#ff7815",
+  },
+  heading: {
+    marginBottom: "40%",
+  },
+  text: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: "800",
+    textAlign: 'center',
+  },
+  wrapButton: {
+    gap: 20,
+    width: '100%',
+    marginBottom: 20,
+    flexDirection: 'row',
+    textAlign: 'center',
+    justifyContent: 'space-around'
+  },
+  button: {
+    width: '40%',
+    fontSize: 30,
+  }
 });
 
 export default App;
